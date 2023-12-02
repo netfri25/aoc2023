@@ -1,4 +1,4 @@
-module Main (main) where
+module Main (main, mainAll) where
 
 import Parts
 import Day1.Solution (Day1(..))

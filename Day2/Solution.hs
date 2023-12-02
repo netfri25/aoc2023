@@ -53,4 +53,4 @@ instance Part2 Day2 where
   solve2 _ = Result . sum . map (setPower . minimumRequiredSet . gameSets)
     where
       setPower = product
-      minimumRequiredSet = foldl (M.unionWith max) mempty
+      minimumRequiredSet = M.unionsWith max

@@ -3,7 +3,6 @@ module Main (main) where
 import Parts
 import Day1.Solution (Day1(..))
 import Day2.Solution (Day2(..))
-import Day3.Solution (Day3(..))
 
 type DayConstraint a = (InputName a, Show a, Part2 a)
 
@@ -15,7 +14,6 @@ days :: [Day]
 days =
   [ Day Day1
   , Day Day2
-  , Day Day3
   ]
 
 main :: IO ()

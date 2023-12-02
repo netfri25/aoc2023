@@ -7,7 +7,7 @@ module Parts
   , part1
   , Part2(..)
   , part2
-  , InputName(..)
+  , InputPath(..)
   ) where
 
 -- the type I wrap every day result with
@@ -21,9 +21,9 @@ instance Show Result where
   show (Result x) = show x
 
 
-class InputName a where
-  exampleName :: a -> FilePath
-  inputName :: a -> FilePath
+class InputPath a where
+  examplePath :: a -> FilePath
+  inputPath :: a -> FilePath
 
 
 class Part1 a where

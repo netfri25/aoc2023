@@ -4,7 +4,7 @@ import Parts
 import Day1.Solution (Day1(..))
 import Day2.Solution (Day2(..))
 
-type DayConstraint a = (InputName a, Show a, Part2 a)
+type DayConstraint a = (InputPath a, Show a, Part2 a)
 
 data Day = forall a. DayConstraint a => Day a
 
@@ -22,13 +22,13 @@ main = do
   print day
 
   putStrLn "\nExample Input:"
-  runDayWith exampleName day
+  runDayWith examplePath day
 
   putStrLn "\nRegular Input:"
-  runDayWith inputName day
+  runDayWith inputPath day
 
 mainAll :: IO ()
-mainAll = mapM_ (runDayWith inputName) days
+mainAll = mapM_ (runDayWith inputPath) days
 
 runDayWith :: (forall d. DayConstraint d => d -> FilePath) -> Day -> IO ()
 runDayWith get_path (Day day) = do

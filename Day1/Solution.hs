@@ -8,9 +8,9 @@ import Data.List (findIndex)
 
 data Day1 = Day1 deriving Show
 
-instance InputName Day1 where
-  exampleName = const "Day1/example.txt"
-  inputName = const "Day1/input.txt"
+instance InputPath Day1 where
+  examplePath = const "Day1/example.txt"
+  inputPath = const "Day1/input.txt"
 
 instance Part1 Day1 where
   type Input Day1 = [String]

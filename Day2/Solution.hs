@@ -50,7 +50,4 @@ instance Part1 Day2 where
 
 instance Part2 Day2 where
   parse2 = parse1
-  solve2 _ = Result . sum . map (setPower . minimumRequiredSet . gameSets)
-    where
-      setPower = product
-      minimumRequiredSet = M.unionsWith max
+  solve2 _ = Result . sum . map (product . M.unionsWith max . gameSets)

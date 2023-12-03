@@ -21,11 +21,11 @@ main = do
   let day = last days
   print day
 
-  putStrLn "\nExample Input:"
-  runDayWith examplePath day
-
   putStrLn "\nRegular Input:"
   runDayWith inputPath day
+
+  putStrLn "\nExample Input:"
+  runDayWith examplePath day
 
 mainAll :: IO ()
 mainAll = mapM_ (runDayWith inputPath) days

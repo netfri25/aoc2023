@@ -21,9 +21,6 @@ data Card = Card
   , cardWinningNumbers :: IS.IntSet
   } deriving Show
 
-instance Eq Card where
-  Card id1 _ _ == Card id2 _ _ = id1 == id2
-
 parseNums :: Parser String IS.IntSet
 parseNums = IS.fromList <$> sepBy ws numP
 

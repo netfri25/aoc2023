@@ -7,9 +7,7 @@ import Parser
 import qualified Data.IntSet as IS
 import qualified Data.IntMap as IM
 import Control.Monad.State
-import Data.List (tails)
-import Data.Bifunctor (first, second)
-import Control.Monad (when)
+import Data.Bifunctor (first)
 
 data Day4 = Day4 deriving Show
 
@@ -51,26 +49,17 @@ instance Part1 Day4 where
   parse1 _ = maybe [] fst . runParserT (sepBy ws parseCard)
   solve1 _ = Result . sum . map cardValue
 
-fix :: Eq a => (a -> a) -> a -> a
-fix f x
-  | x == x' = x'
-  | otherwise = fix f x'
-  where x' = f x
-
-cardsMap :: [Card] -> IM.IntMap Card
-cardsMap = IM.fromList . map ((,) <$> cardId <*> id)
-
 type Count = Int
 type Simulation = State (IM.IntMap (Count, Card))
 
 addCards :: Int -> Int -> Simulation ()
-addCards amount card_id = modify (IM.adjust (first (+ amount)) card_id)
+addCards amount card_id = modify $ IM.adjust (first (+ amount)) card_id
 
 evalCard :: Int -> Simulation ()
 evalCard card_id = do
   (amount, card) <- gets (IM.! card_id)
   let wins = cardWins card
-  let cards_got = take wins [succ (cardId card) ..]
+  let cards_got = take wins [succ card_id..]
   mapM_ (addCards amount) cards_got
 
 instance Part2 Day4 where

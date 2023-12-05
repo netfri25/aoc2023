@@ -34,7 +34,7 @@ main = do
   runDayWith examplePath day
 
 mainAll :: IO ()
-mainAll = mapM_ (runDayWith inputPath) days
+mainAll = mapM_ ((>>) <$> print <*> runDayWith inputPath) days
 
 runDayWith :: (forall d input1 input2. DayConstraint d input1 input2 => d -> FilePath) -> Day -> IO ()
 runDayWith get_path (Day day) = do

@@ -8,7 +8,7 @@ module Parser
   , nextP
   , ifP
   , eqP
-  , listP
+  , seqP
   , spanP
   , sepBy
   , ws
@@ -47,8 +47,8 @@ optP p = StateT $ \i -> case runParserT p i of
 eqP :: (Input i c, Eq c) => c -> Parser i c
 eqP c = ifP (==c)
 
-listP :: (Input i c, Eq c, Traversable t) => t c -> Parser i (t c)
-listP = traverse eqP
+seqP :: (Input i c, Eq c, Traversable t) => t c -> Parser i (t c)
+seqP = traverse eqP
 
 spanP :: Input i c => (c -> Bool) -> Parser i [c]
 spanP = many . ifP

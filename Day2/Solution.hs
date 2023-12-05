@@ -25,7 +25,7 @@ data Game = Game
 parseGame :: Parser String Game
 parseGame = Game <$> gameNum <* ws <*> gameSets
   where
-    gameNum = listP "Game" *> ws *> numP <* eqP ':'
+    gameNum = seqP "Game" *> ws *> numP <* eqP ':'
     gameSets = sepBy (ws *> eqP ';' <* ws) parseSet
 
 parseSet :: Parser String CubeSet
@@ -34,9 +34,9 @@ parseSet = M.fromList <$> sepBy (ws *> eqP ',' <* ws) (flip (,) <$> numP <* ws <
 parseColor :: Parser String Color
 parseColor = red <|> green <|> blue
   where
-    red = Red <$ listP "red"
-    green = Green <$ listP "green"
-    blue = Blue <$ listP "blue"
+    red = Red <$ seqP "red"
+    green = Green <$ seqP "green"
+    blue = Blue <$ seqP "blue"
 
 instance Part1 Day2 [Game] where
   parse1 _ = maybe [] fst . runParserT (mfilter (not . null) $ sepBy ws parseGame)

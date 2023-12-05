@@ -26,7 +26,7 @@ parseNums = IS.fromList <$> sepBy ws numP
 
 parseCard :: Parser String Card
 parseCard = Card <$> card_id <* ws <*> parseNums <* ws <* eqP '|' <* ws <*> parseNums <* ws
-  where card_id = listP "Card" *> ws *> numP <* eqP ':' <* ws
+  where card_id = seqP "Card" *> ws *> numP <* eqP ':' <* ws
 
 winning :: Card -> IS.IntSet
 winning = IS.intersection <$> cardNums <*> cardWinningNumbers

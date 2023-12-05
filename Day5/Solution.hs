@@ -57,10 +57,10 @@ data Map = Map
   } deriving Show
 
 parseMap :: Parser String Map
-parseMap = Map <$> spanP isAlpha <* listP "-to-" <*> spanP isAlpha <* ws <* listP "map:" <* ws <*> sepBy ws parseConversion
+parseMap = Map <$> spanP isAlpha <* seqP "-to-" <*> spanP isAlpha <* ws <* seqP "map:" <* ws <*> sepBy ws parseConversion
 
 parseSeeds1 :: Parser String [Int]
-parseSeeds1 = listP "seeds:" *> ws *> sepBy ws numP
+parseSeeds1 = seqP "seeds:" *> ws *> sepBy ws numP
 
 convert :: Int -> Conversion -> Maybe Int
 convert from conv
@@ -78,7 +78,7 @@ instance Part1 Day5 ([Int], [Map]) where
   solve1 _ (seeds, maps) = Result $ minimum $ map (flip (foldl convertByMap) maps) seeds
 
 parseSeeds2 :: Parser String [Range]
-parseSeeds2 = listP "seeds:" *> ws *> sepBy ws parseRange
+parseSeeds2 = seqP "seeds:" *> ws *> sepBy ws parseRange
 
 convertRange :: Range -> [Conversion] -> [Range]
 convertRange r [] = return r -- rangeShift (convOffset conv) $ rangeIntersection r (convSourceRange conv)

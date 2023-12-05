@@ -7,9 +7,9 @@ import Day3.Solution (Day3(..))
 import Day4.Solution (Day4(..))
 import Day5.Solution (Day5(..))
 
-type DayConstraint a = (InputPath a, Show a, Part2 a)
+type DayConstraint day input1 input2 = (InputPath day, Show day, Part1 day input1, Part2 day input2)
 
-data Day = forall a. DayConstraint a => Day a
+data Day = forall day input1 input2. DayConstraint day input1 input2 => Day day
 
 deriving instance Show Day
 
@@ -36,7 +36,7 @@ main = do
 mainAll :: IO ()
 mainAll = mapM_ (runDayWith inputPath) days
 
-runDayWith :: (forall d. DayConstraint d => d -> FilePath) -> Day -> IO ()
+runDayWith :: (forall d input1 input2. DayConstraint d input1 input2 => d -> FilePath) -> Day -> IO ()
 runDayWith get_path (Day day) = do
   res1 <- run1 (Day day) (get_path day)
   putStrLn $ unwords ["Part 1:", show res1]

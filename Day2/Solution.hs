@@ -1,4 +1,4 @@
-{-# LANGUAGE TypeFamilies #-}
+{-# OPTIONS_GHC -Wall -Wextra #-}
 module Day2.Solution (Day2(..)) where
 
 import Parts
@@ -6,7 +6,6 @@ import Parser
 
 import Control.Applicative (Alternative(..))
 import Control.Monad (mfilter)
-import Data.Maybe (fromMaybe)
 import qualified Data.Map.Strict as M
 
 data Day2 = Day2 deriving Show
@@ -39,8 +38,7 @@ parseColor = red <|> green <|> blue
     green = Green <$ listP "green"
     blue = Blue <$ listP "blue"
 
-instance Part1 Day2 where
-  type Input Day2 = [Game]
+instance Part1 Day2 [Game] where
   parse1 _ = maybe [] fst . runParserT (mfilter (not . null) $ sepBy ws parseGame)
   solve1 _ = Result . sum . map gameId . filter canPlayGame
     where
@@ -48,6 +46,6 @@ instance Part1 Day2 where
       canPlaySet = and . M.intersectionWith (>=) maxCubes
       maxCubes = M.fromList [(Red, 12), (Green, 13), (Blue, 14)]
 
-instance Part2 Day2 where
+instance Part2 Day2 [Game] where
   parse2 = parse1
   solve2 _ = Result . sum . map (product . M.unionsWith max . gameSets)

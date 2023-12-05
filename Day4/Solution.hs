@@ -1,4 +1,4 @@
-{-# LANGUAGE TypeFamilies #-}
+{-# OPTIONS_GHC -Wall -Wextra #-}
 module Day4.Solution (Day4(..)) where
 
 import Parts
@@ -41,8 +41,7 @@ safePow :: Int -> Int -> Int
 safePow _ e | e < 0 = 0
 safePow n e = n^e
 
-instance Part1 Day4 where
-  type Input Day4 = [Card]
+instance Part1 Day4 [Card] where
   parse1 _ = maybe [] fst . runParserT (sepBy ws parseCard)
   solve1 _ = Result . sum . map cardValue
 
@@ -59,7 +58,7 @@ evalCard card_id = do
   let cards_got = take wins [succ card_id..]
   mapM_ (addCards amount) cards_got
 
-instance Part2 Day4 where
+instance Part2 Day4 [Card] where
   parse2 = parse1
   solve2 _ cards = Result $ sum $ map fst $ IM.elems $ flip execState cards_map $ mapM_ (evalCard . cardId) cards
     where cards_map = IM.fromList $ zip (map cardId cards) $ map (1,) cards

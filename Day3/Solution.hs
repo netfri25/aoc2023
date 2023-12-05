@@ -1,16 +1,14 @@
-{-# LANGUAGE TypeFamilies #-}
+{-# OPTIONS_GHC -Wall -Wextra #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE ViewPatterns #-}
 module Day3.Solution (Day3(..)) where
 
 import Parts
 import Parser
-import Data.List (uncons, nub)
+import Data.List (uncons)
 import Control.Monad.State (gets)
 import Data.Char (isDigit, isSpace)
 import Control.Applicative (Alternative(..))
-import Control.Monad (mfilter)
-import Data.Maybe (maybe)
 import qualified Data.Map.Strict as M
 import qualified Data.Set as S
 
@@ -33,6 +31,7 @@ isNumber = not . isSymbol
 
 fromNumber :: ItemKind -> Int
 fromNumber (Number n) = n
+fromNumber _ = undefined
 
 data ItemsInput = MkInput
   { inputRow  :: !Int
@@ -63,6 +62,7 @@ isPart symbols (Position row col, Number n) = any (`S.member` symbols) $ do
   c <- [col-1 .. col + length (show n)]
   r <- [row-1..row+1]
   return $ Position r c
+isPart _ _ = undefined
 
 getParts :: M.Map Position ItemKind -> [Item]
 getParts items = parts
@@ -71,8 +71,7 @@ getParts items = parts
     symbols = S.fromList $ map fst $ filter (isSymbol . snd) $ M.assocs items
     parts = filter (isPart symbols) numbers
 
-instance Part1 Day3 where
-  type Input Day3 = M.Map Position ItemKind
+instance Part1 Day3 (M.Map Position ItemKind) where
   parse1 _ = M.fromList . maybe [] fst . runParserT (skip *> many (skip *> parseItem <* skip)) . MkInput 1 1
     where skip = spanP (\c -> isSpace c || c == '.')
   solve1 _ = Result . sum . map (fromNumber . snd) . getParts
@@ -82,6 +81,7 @@ partsNear (Position prow pcol) = filter (any (`elem` positions) . allPositions)
   where
     positions = [Position r c | r <- [prow-1..prow+1], c <- [pcol-1..pcol+1]]
     allPositions (Position row col, Number n) = Position row <$> [col..col + length (show n) - 1]
+    allPositions _ = undefined
 
 lengthIs :: Int -> [a] -> Bool
 lengthIs 0 [] = True
@@ -89,7 +89,7 @@ lengthIs 0 _ = False
 lengthIs _ [] = False
 lengthIs n xs = lengthIs (pred n) (tail xs)
 
-instance Part2 Day3 where
+instance Part2 Day3 (M.Map Position ItemKind) where
   parse2 = parse1
   solve2 _ items = Result $ sum $ map (product . map (fromNumber . snd)) gearsParts
     where

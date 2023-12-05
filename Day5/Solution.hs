@@ -1,5 +1,4 @@
 {-# OPTIONS_GHC -Wall -Wextra #-}
-{-# LANGUAGE TypeFamilies #-}
 module Day5.Solution (Day5(..)) where
 
 import Parts
@@ -60,10 +59,8 @@ data Map = Map
 parseMap :: Parser String Map
 parseMap = Map <$> spanP isAlpha <* listP "-to-" <*> spanP isAlpha <* ws <* listP "map:" <* ws <*> sepBy ws parseConversion
 
-type Seed = Range
-
-parseSeeds1 :: Parser String [Seed]
-parseSeeds1 = listP "seeds:" *> ws *> sepBy ws ((\x -> Range x x) <$> numP)
+parseSeeds1 :: Parser String [Int]
+parseSeeds1 = listP "seeds:" *> ws *> sepBy ws numP
 
 convert :: Int -> Conversion -> Maybe Int
 convert from conv
@@ -76,12 +73,11 @@ convert from conv
 convertByMap :: Int -> Map -> Int
 convertByMap from (Map {mapConversions}) = fromMaybe from $ listToMaybe $ mapMaybe (convert from) mapConversions
 
-instance Part1 Day5 where
-  type Input Day5 = ([Seed], [Map])
+instance Part1 Day5 ([Int], [Map]) where
   parse1 _ = fst . fromJust . runParserT ((,) <$> parseSeeds1 <* ws <*> sepBy ws parseMap)
-  solve1 _ (seeds, maps) = Result $ minimum $ map (flip (foldl convertByMap) maps . rangeStart) seeds
+  solve1 _ (seeds, maps) = Result $ minimum $ map (flip (foldl convertByMap) maps) seeds
 
-parseSeeds2 :: Parser String [Seed]
+parseSeeds2 :: Parser String [Range]
 parseSeeds2 = listP "seeds:" *> ws *> sepBy ws parseRange
 
 convertRange :: Range -> [Conversion] -> [Range]
@@ -134,6 +130,6 @@ trimRanges =
     )
     []
 
-instance Part2 Day5 where
+instance Part2 Day5 ([Range], [Map]) where
   parse2 _ = fst . fromJust . runParserT ((,) <$> parseSeeds2 <* ws <*> sepBy ws parseMap)
   solve2 _ (seeds, maps) = Result $ minimum $ map rangeStart $ foldl convertRangesByMap seeds maps

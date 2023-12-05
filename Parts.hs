@@ -1,4 +1,4 @@
-{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE FunctionalDependencies #-}
 
 module Parts
   ( Result(..)
@@ -21,23 +21,22 @@ instance Show Result where
   show (Result x) = show x
 
 
-class InputPath a where
-  examplePath :: a -> FilePath
-  inputPath :: a -> FilePath
+class InputPath day where
+  examplePath :: day -> FilePath
+  inputPath :: day -> FilePath
 
 
-class Part1 a where
-  type Input a
-  parse1 :: a -> String -> Input a
-  solve1 :: a -> Input a -> Result
+class Part1 day input | day -> input where
+  parse1 :: day -> String -> input
+  solve1 :: day -> input -> Result
 
-part1 :: Part1 a => a -> String -> Result
+part1 :: Part1 day input => day -> String -> Result
 part1 day = solve1 day . parse1 day
 
 
-class (Part1 a) => Part2 a where
-  parse2 :: a -> String -> Input a
-  solve2 :: a -> Input a -> Result
+class Part2 day input | day -> input where
+  parse2 :: day -> String -> input
+  solve2 :: day -> input -> Result
 
-part2 :: Part2 a => a -> String -> Result
+part2 :: Part2 day input => day -> String -> Result
 part2 day = solve2 day . parse2 day

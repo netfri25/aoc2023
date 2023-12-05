@@ -34,7 +34,7 @@ createDay day = do
 
 solutionContent :: Int -> String
 solutionContent day_n = unlines
-  [ "{-# LANGUAGE TypeFamilies #-}"
+  [ "{-# OPTIONS_GHC -Wall -Wextra #-}"
   , "module " ++ day ++ ".Solution (" ++ day ++ "(..)) where"
   , ""
   , "import Parts"
@@ -45,12 +45,11 @@ solutionContent day_n = unlines
   , "  examplePath = const \"" ++ day ++ "/example.txt\""
   , "  inputPath = const \"" ++ day ++ "/input.txt\""
   , ""
-  , "instance Part1 " ++ day ++ " where"
-  , "  type Input " ++ day ++ " = ()"
+  , "instance Part1 " ++ day ++ " () where"
   , "  parse1 _ = undefined"
   , "  solve1 _ = Result . const Todo"
   , ""
-  , "instance Part2 " ++ day ++ " where"
+  , "instance Part2 " ++ day ++ " () where"
   , "  parse2 _ = undefined"
   , "  solve2 _ = Result . const Todo"
   ]

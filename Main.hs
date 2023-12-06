@@ -6,6 +6,7 @@ import Day2.Solution (Day2(..))
 import Day3.Solution (Day3(..))
 import Day4.Solution (Day4(..))
 import Day5.Solution (Day5(..))
+import Day6.Solution (Day6(..))
 
 type DayConstraint day input1 input2 = (InputPath day, Show day, Part1 day input1, Part2 day input2)
 
@@ -20,6 +21,7 @@ days =
   , Day Day3
   , Day Day4
   , Day Day5
+  , Day Day6
   ]
 
 main :: IO ()

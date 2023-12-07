@@ -4,7 +4,6 @@ module Day6.Solution (Day6(..)) where
 import Parts
 import Parser
 
-import Control.Monad.State (lift)
 import Text.Read (readMaybe)
 import Data.Maybe (fromJust)
 

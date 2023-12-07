@@ -13,6 +13,7 @@ module Parser
   , sepBy
   , ws
   , numP
+  , Control.Monad.State.lift
   ) where
 
 import Control.Monad.State

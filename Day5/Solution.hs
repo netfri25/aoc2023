@@ -8,10 +8,6 @@ import Data.Maybe (fromJust, mapMaybe, listToMaybe, fromMaybe)
 
 data Day5 = Day5 deriving Show
 
-instance InputPath Day5 where
-  examplePath = const "Day5/example.txt"
-  inputPath = const "Day5/input.txt"
-
 data Range = Range
   { rangeStart :: Int
   , rangeEnd   :: Int

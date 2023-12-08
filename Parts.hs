@@ -7,7 +7,6 @@ module Parts
   , part1
   , Part2(..)
   , part2
-  , InputPath(..)
   ) where
 
 -- the type I wrap every day result with
@@ -19,11 +18,6 @@ data Todo = Todo deriving Show
 
 instance Show Result where
   show (Result x) = show x
-
-
-class InputPath day where
-  examplePath :: day -> FilePath
-  inputPath :: day -> FilePath
 
 
 class Part1 day input | day -> input where

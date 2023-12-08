@@ -10,10 +10,6 @@ import qualified Data.Map.Strict as M
 
 data Day2 = Day2 deriving Show
 
-instance InputPath Day2 where
-  examplePath = const "Day2/example.txt"
-  inputPath = const "Day2/input.txt"
-
 data Color = Red | Green | Blue deriving (Show, Eq, Ord)
 type Cube = Color
 type CubeSet = M.Map Cube Int

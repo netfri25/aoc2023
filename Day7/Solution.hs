@@ -13,10 +13,6 @@ import Data.Bifunctor (second)
 
 data Day7 = Day7 deriving Show
 
-instance InputPath Day7 where
-  examplePath = const "Day7/example.txt"
-  inputPath = const "Day7/input.txt"
-
 newtype Card = Card Word8
   deriving (Show, Eq, Ord)
 

@@ -9,10 +9,6 @@ import Data.Maybe (fromJust)
 
 data Day6 = Day6 deriving Show
 
-instance InputPath Day6 where
-  examplePath = const "Day6/example.txt"
-  inputPath = const "Day6/input.txt"
-
 type Time = Int
 type Distance = Int
 

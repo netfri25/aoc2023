@@ -11,10 +11,6 @@ import Data.Maybe (fromJust, catMaybes, isJust)
 
 data Day8 = Day8 deriving Show
 
-instance InputPath Day8 where
-  examplePath = const "Day8/example.txt"
-  inputPath = const "Day8/input.txt"
-
 data Conn = Conn
   { connLeft :: String
   , connRight :: String

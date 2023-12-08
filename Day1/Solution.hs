@@ -8,10 +8,6 @@ import Data.List (findIndex)
 
 data Day1 = Day1 deriving Show
 
-instance InputPath Day1 where
-  examplePath = const "Day1/example.txt"
-  inputPath = const "Day1/input.txt"
-
 instance Part1 Day1 [String] where
   parse1 _ = map (filter isDigit) . lines
   solve1 _ = Result . sum . map extractNumber

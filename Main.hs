@@ -1,3 +1,4 @@
+{-# OPTIONS_GHC -Wall -Wextra #-}
 module Main (main, mainAll) where
 
 import Parts
@@ -8,11 +9,14 @@ import Day4.Solution (Day4(..))
 import Day5.Solution (Day5(..))
 import Day6.Solution (Day6(..))
 import Day7.Solution (Day7(..))
+import Day8.Solution (Day8(..))
 
-type DayConstraint day input1 input2 = (InputPath day, Show day, Part1 day input1, Part2 day input2)
+import System.Directory (listDirectory)
+import Data.List (isSuffixOf, sort)
 
-data Day = forall day input1 input2. DayConstraint day input1 input2 => Day day
+type DayConstraint day input1 input2 = (Show day, Part1 day input1, Part2 day input2)
 
+data Day = forall day i1 i2. DayConstraint day i1 i2 => Day day
 deriving instance Show Day
 
 days :: [Day]
@@ -24,31 +28,40 @@ days =
   , Day Day5
   , Day Day6
   , Day Day7
+  , Day Day8
   ]
 
 main :: IO ()
-main = do
-  let day = last days
-  print day
+main = runDay $ last days
 
-  putStrLn "\nRegular Input:"
-  runDayWith inputPath day
-
-  putStrLn "\nExample Input:"
-  runDayWith examplePath day
+runDay :: Day -> IO ()
+runDay (Day day) = dayPaths day >>= runAllPaths day >>= mapM_ print
 
 mainAll :: IO ()
-mainAll = mapM_ ((>>) <$> print <*> runDayWith inputPath) days
+mainAll = mapM_ runDay days
 
-runDayWith :: (forall d input1 input2. DayConstraint d input1 input2 => d -> FilePath) -> Day -> IO ()
-runDayWith get_path (Day day) = do
-  res1 <- run1 (Day day) (get_path day)
-  putStrLn $ unwords ["Part 1:", show res1]
-  res2 <- run2 (Day day) (get_path day)
-  putStrLn $ unwords ["Part 2:", show res2]
+data Output = Output FilePath Result Result
 
-run1 :: Day -> String -> IO Result
-run1 (Day day) path = part1 day <$> readFile path
+instance Show Output where
+  show (Output path r1 r2) = unlines [path ++ ":", "Part 1: " ++ show r1, "Part 2: " ++ show r2]
 
-run2 :: Day -> String -> IO Result
-run2 (Day day) path = part2 day <$> readFile path
+dayPaths :: DayConstraint day i1 i2 => day -> IO [FilePath]
+dayPaths day = do
+  let dir = show day
+  paths <- listDirectory dir
+  return $ sort $ map (\p -> dir ++ "/" ++ p) $ filter (isSuffixOf ".txt") paths
+
+runAllPaths :: DayConstraint day i1 i2 => day -> [FilePath] -> IO [Output]
+runAllPaths day = mapM (\path -> uncurry (Output path) <$> executeDayWith day path)
+
+executeDayWith :: DayConstraint day i1 i2 => day -> FilePath -> IO (Result, Result)
+executeDayWith day path = do
+  res1 <- run1 day path
+  res2 <- run2 day path
+  return (res1, res2)
+
+run1 :: DayConstraint day i1 i2 => day -> String -> IO Result
+run1 day path = part1 day <$> readFile path
+
+run2 :: DayConstraint day i1 i2 => day -> String -> IO Result
+run2 day path = part2 day <$> readFile path

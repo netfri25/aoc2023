@@ -11,10 +11,6 @@ import Data.Bifunctor (first)
 
 data Day4 = Day4 deriving Show
 
-instance InputPath Day4 where
-  examplePath = const "Day4/example.txt"
-  inputPath = const "Day4/input.txt"
-
 data Card = Card
   { cardId :: Int
   , cardNums :: IS.IntSet

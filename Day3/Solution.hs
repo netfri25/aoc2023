@@ -14,10 +14,6 @@ import qualified Data.Set as S
 
 data Day3 = Day3 deriving Show
 
-instance InputPath Day3 where
-  examplePath = const "Day3/example.txt"
-  inputPath = const "Day3/input.txt"
-
 data ItemKind = Symbol Char | Number !Int deriving (Show, Eq)
 data Position = Position !Int !Int deriving (Show, Eq, Ord)
 type Item = (Position, ItemKind)

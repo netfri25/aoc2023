@@ -24,6 +24,10 @@ parseConn = Conn <$> (eqP '(' *> parseConnName) <* ws <* eqP ',' <* ws <*> parse
 
 data Inst = L | R deriving (Show, Eq)
 
+runInst :: Inst -> Conn -> String
+runInst L = connLeft
+runInst R = connRight
+
 parseInst :: Input i Char => Parser i Inst
 parseInst = nextP >>= lift . flip lookup [('L', L), ('R', R)]
 
@@ -37,10 +41,6 @@ parseGraphNode = (,) <$> parseConnName <* ws <* eqP '=' <* ws <*> parseConn
 
 parseGraph :: Parser String Graph
 parseGraph = M.fromList <$> sepBy ws parseGraphNode
-
-runInst :: Inst -> Conn -> String
-runInst L = connLeft
-runInst R = connRight
 
 path :: [Inst] -> Graph -> String -> Maybe [String]
 path insts graph conn_name = not_single $ catMaybes $ takeWhile isJust $ scanl next (Just conn_name) insts

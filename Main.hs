@@ -48,7 +48,7 @@ runDay (Day day) = dayPaths day >>= traverse (runDayWith day) >>= printOutputs
 mainAll :: IO ()
 mainAll = mapM_ (\day -> runDay day >> putStrLn "") days
 
-newtype TimeMS = TimeMS Float
+newtype TimeMS = TimeMS Float deriving Num
 type Timed a = (TimeMS, a)
 
 instance Show TimeMS where
@@ -69,6 +69,7 @@ instance Show Output where
     [ path ++ ":"
     , "Part 1: " ++ show r1 ++ " (" ++ show t1 ++ ")"
     , "Part 2: " ++ show r2 ++ " (" ++ show t2 ++ ")"
+    , "Total time: " ++ show (t1 + t2)
     ]
 
 dayPaths :: DayConstraint day i1 i2 => day -> IO [FilePath]

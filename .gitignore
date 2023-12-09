@@ -1,3 +1,5 @@
 Main
 *.o
 *.hi
+input*.txt
+example*.txt

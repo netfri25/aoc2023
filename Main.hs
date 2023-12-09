@@ -34,13 +34,16 @@ days =
   ]
 
 main :: IO ()
-main = runDay $ last days
+main = runDay (last days) >>= printOutputs
 
-runDay :: Day -> IO ()
-runDay (Day day) = dayPaths day >>= traverse (runDayWith day) >>= putStrLn . intercalate "\n\n" . map show
+printOutputs :: [Output] -> IO ()
+printOutputs = putStrLn . intercalate "\n\n" . map show
+
+runDay :: Day -> IO [Output]
+runDay (Day day) = dayPaths day >>= traverse (runDayWith day)
 
 mainAll :: IO ()
-mainAll = mapM_ runDay days
+mainAll = traverse runDay days >>= printOutputs . concat
 
 data Output = Output FilePath Result Result
 

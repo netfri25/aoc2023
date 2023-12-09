@@ -37,7 +37,7 @@ main :: IO ()
 main = runDay $ last days
 
 runDay :: Day -> IO ()
-runDay (Day day) = dayPaths day >>= runAllPaths day >>= mapM_ print
+runDay (Day day) = dayPaths day >>= traverse (runDayWith day) >>= mapM_ print
 
 mainAll :: IO ()
 mainAll = mapM_ runDay days
@@ -53,8 +53,8 @@ dayPaths day = do
   paths <- listDirectory dir
   return $ sort $ map (\p -> dir ++ "/" ++ p) $ filter (isSuffixOf ".txt") paths
 
-runAllPaths :: DayConstraint day i1 i2 => day -> [FilePath] -> IO [Output]
-runAllPaths day = mapM (\path -> uncurry (Output path) <$> executeDayWith day path)
+runDayWith :: DayConstraint day i1 i2 => day -> FilePath -> IO Output
+runDayWith day path = uncurry (Output path) <$> executeDayWith day path
 
 executeDayWith :: DayConstraint day i1 i2 => day -> FilePath -> IO (Result, Result)
 executeDayWith day path = do

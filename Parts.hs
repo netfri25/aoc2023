@@ -9,10 +9,15 @@ module Parts
   , part2
   ) where
 
+import Control.DeepSeq (NFData(..), force)
+
 -- the type I wrap every day result with
 -- requires the type to have an instance of the Show class
 data Result where
-  Result :: Show a => a -> Result
+  Result :: (Show a, NFData a) => a -> Result
+
+instance NFData Result where
+  rnf (Result x) = rnf x
 
 data Todo = Todo deriving Show
 

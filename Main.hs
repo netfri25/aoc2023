@@ -13,7 +13,7 @@ import Day8.Solution (Day8(..))
 import Day9.Solution (Day9(..))
 
 import System.Directory (listDirectory)
-import Data.List (isSuffixOf, sort)
+import Data.List (isSuffixOf, sort, intercalate)
 
 type DayConstraint day input1 input2 = (Show day, Part1 day input1, Part2 day input2)
 
@@ -37,7 +37,7 @@ main :: IO ()
 main = runDay $ last days
 
 runDay :: Day -> IO ()
-runDay (Day day) = dayPaths day >>= traverse (runDayWith day) >>= mapM_ print
+runDay (Day day) = dayPaths day >>= traverse (runDayWith day) >>= putStrLn . intercalate "\n\n" . map show
 
 mainAll :: IO ()
 mainAll = mapM_ runDay days
@@ -45,7 +45,7 @@ mainAll = mapM_ runDay days
 data Output = Output FilePath Result Result
 
 instance Show Output where
-  show (Output path r1 r2) = unlines [path ++ ":", "Part 1: " ++ show r1, "Part 2: " ++ show r2]
+  show (Output path r1 r2) = init $ unlines [path ++ ":", "Part 1: " ++ show r1, "Part 2: " ++ show r2]
 
 dayPaths :: DayConstraint day i1 i2 => day -> IO [FilePath]
 dayPaths day = do

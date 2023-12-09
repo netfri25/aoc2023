@@ -13,6 +13,7 @@ module Parser
   , sepBy
   , ws
   , numP
+  , runParser
   , Control.Monad.State.lift
   ) where
 
@@ -22,6 +23,7 @@ import Data.Char (isSpace, isDigit)
 import Control.Monad (mfilter)
 import Control.Applicative (Alternative(..))
 import Text.Read (readMaybe)
+import Data.Maybe (fromMaybe)
 
 class Input i c | i -> c where
   inputNext :: i -> Maybe (c, i)
@@ -33,6 +35,9 @@ type Parser i a = StateT i Maybe a
 
 runParserT :: Parser i a -> i -> Maybe (a, i)
 runParserT = runStateT
+
+runParser :: Parser i a -> i -> a
+runParser p = fst . fromMaybe (error "parser failed") . runStateT p
 
 nextP :: Input i c => Parser i c
 nextP = StateT inputNext

@@ -68,7 +68,7 @@ getParts items = parts
     parts = filter (isPart symbols) numbers
 
 instance Part1 Day3 (M.Map Position ItemKind) where
-  parse1 _ = M.fromList . maybe [] fst . runParserT (skip *> many (skip *> parseItem <* skip)) . MkInput 1 1
+  parse1 _ = M.fromList . runParser (skip *> many (skip *> parseItem <* skip)) . MkInput 1 1
     where skip = spanP (\c -> isSpace c || c == '.')
   solve1 _ = Result . sum . map (fromNumber . snd) . getParts
 

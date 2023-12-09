@@ -38,7 +38,7 @@ safePow _ e | e < 0 = 0
 safePow n e = n^e
 
 instance Part1 Day4 [Card] where
-  parse1 _ = maybe [] fst . runParserT (sepBy ws parseCard)
+  parse1 _ = runParser (sepBy ws parseCard)
   solve1 _ = Result . sum . map cardValue
 
 type Count = Int

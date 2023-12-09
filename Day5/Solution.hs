@@ -4,7 +4,7 @@ module Day5.Solution (Day5(..)) where
 import Parts
 import Parser
 import Data.Char (isAlpha)
-import Data.Maybe (fromJust, mapMaybe, listToMaybe, fromMaybe)
+import Data.Maybe (mapMaybe, listToMaybe, fromMaybe)
 
 data Day5 = Day5 deriving Show
 
@@ -70,7 +70,7 @@ convertByMap :: Int -> Map -> Int
 convertByMap from (Map {mapConversions}) = fromMaybe from $ listToMaybe $ mapMaybe (convert from) mapConversions
 
 instance Part1 Day5 ([Int], [Map]) where
-  parse1 _ = fst . fromJust . runParserT ((,) <$> parseSeeds1 <* ws <*> sepBy ws parseMap)
+  parse1 _ = runParser $ (,) <$> parseSeeds1 <* ws <*> sepBy ws parseMap
   solve1 _ (seeds, maps) = Result $ minimum $ map (flip (foldl convertByMap) maps) seeds
 
 parseSeeds2 :: Parser String [Range]
@@ -127,5 +127,5 @@ trimRanges =
     []
 
 instance Part2 Day5 ([Range], [Map]) where
-  parse2 _ = fst . fromJust . runParserT ((,) <$> parseSeeds2 <* ws <*> sepBy ws parseMap)
+  parse2 _ = runParser $ (,) <$> parseSeeds2 <* ws <*> sepBy ws parseMap
   solve2 _ (seeds, maps) = Result $ minimum $ map rangeStart $ foldl convertRangesByMap seeds maps

@@ -35,7 +35,7 @@ parseColor = red <|> green <|> blue
     blue = Blue <$ seqP "blue"
 
 instance Part1 Day2 [Game] where
-  parse1 _ = maybe [] fst . runParserT (mfilter (not . null) $ sepBy ws parseGame)
+  parse1 _ = runParser $ mfilter (not . null) $ sepBy ws parseGame
   solve1 _ = Result . sum . map gameId . filter canPlayGame
     where
       canPlayGame (Game _ cubeSets) = all canPlaySet cubeSets

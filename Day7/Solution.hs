@@ -75,7 +75,7 @@ totalWins :: (Bet -> Strength) -> [Bet] -> Int
 totalWins strength = sum . zipWith (*) [1..] . map betBid . concatMap (sortOn betHand) . groupBy ((==) `on` strength) . sortOn strength
 
 instance Part1 Day7 [Bet] where
-  parse1 _ = fst . fromJust . runParserT (sepBy ws parseBet)
+  parse1 _ = runParser $ sepBy ws parseBet
   solve1 _ = Result . totalWins (handStrength . betHand)
 
 change :: Eq a => a -> a -> [a] -> [a]

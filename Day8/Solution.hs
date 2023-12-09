@@ -7,7 +7,7 @@ import Parser
 import Data.Char (isAlphaNum)
 import qualified Data.Map as M
 import Control.Applicative (many)
-import Data.Maybe (fromJust, catMaybes, isJust)
+import Data.Maybe (catMaybes, isJust)
 
 data Day8 = Day8 deriving Show
 
@@ -56,7 +56,7 @@ pathLen :: [Inst] -> Graph -> (String -> Bool) -> String -> Maybe Int
 pathLen insts graph continue_if = fmap (length . takeWhile continue_if) . path insts graph
 
 instance Part1 Day8 ([Inst], Graph) where
-  parse1 _ = fst . fromJust . runParserT ((,) <$> (cycle <$> parseInsts) <* ws <*> parseGraph)
+  parse1 _ = runParser $ (,) <$> (cycle <$> parseInsts) <* ws <*> parseGraph
   solve1 _ (insts, graph) = Result $ pathLen insts graph (/="ZZZ") "AAA"
 
 instance Part2 Day8 ([Inst], Graph) where

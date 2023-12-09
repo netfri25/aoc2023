@@ -5,7 +5,6 @@ import Parts
 import Parser
 
 import Text.Read (readMaybe)
-import Data.Maybe (fromJust)
 
 data Day6 = Day6 deriving Show
 
@@ -39,7 +38,7 @@ wins :: Race -> Int
 wins (Race total high) = length $ takeWhile (>high) $ dropWhile (<=high) $ map (race total) [0..total]
 
 instance Part1 Day6 [Race] where
-  parse1 _ = maybe [] fst . runParserT parseRaces
+  parse1 _ = runParser parseRaces
   solve1 _ = Result . product . map wins
 
 parseSingleRace :: Parser String Race
@@ -50,5 +49,5 @@ parseSingleRace = Race <$> race_time <* ws <*> race_highscore
     race_highscore = distPrefix *> ws *> nums_as_num
 
 instance Part2 Day6 Race where
-  parse2 _ = fst . fromJust . runParserT parseSingleRace
+  parse2 _ = runParser parseSingleRace
   solve2 day r = solve1 day [r]

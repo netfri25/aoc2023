@@ -71,7 +71,7 @@ convertByMap from (Map {mapConversions}) = fromMaybe from $ listToMaybe $ mapMay
 
 instance Part1 Day5 ([Int], [Map]) where
   parse1 _ = runParser $ (,) <$> parseSeeds1 <* ws <*> sepBy ws parseMap
-  solve1 _ (seeds, maps) = Result $ minimum $ map (flip (foldl convertByMap) maps) seeds
+  solve1 _ (seeds, maps) = show $ minimum $ map (flip (foldl convertByMap) maps) seeds
 
 parseSeeds2 :: Parser String [Range]
 parseSeeds2 = seqP "seeds:" *> ws *> sepBy ws parseRange
@@ -128,4 +128,4 @@ trimRanges =
 
 instance Part2 Day5 ([Range], [Map]) where
   parse2 _ = runParser $ (,) <$> parseSeeds2 <* ws <*> sepBy ws parseMap
-  solve2 _ (seeds, maps) = Result $ minimum $ map rangeStart $ foldl convertRangesByMap seeds maps
+  solve2 _ (seeds, maps) = show $ minimum $ map rangeStart $ foldl convertRangesByMap seeds maps

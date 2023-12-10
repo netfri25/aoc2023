@@ -57,11 +57,11 @@ pathLen insts graph continue_if = fmap (length . takeWhile continue_if) . path i
 
 instance Part1 Day8 ([Inst], Graph) where
   parse1 _ = runParser $ (,) <$> (cycle <$> parseInsts) <* ws <*> parseGraph
-  solve1 _ (insts, graph) = Result $ pathLen insts graph (/="ZZZ") "AAA"
+  solve1 _ (insts, graph) = show $ pathLen insts graph (/="ZZZ") "AAA"
 
 instance Part2 Day8 ([Inst], Graph) where
   parse2 = parse1
-  solve2 _ (insts, graph) = Result $ foldl1 lcm <$> traverse (pathLen insts graph $ not . is_end) starts
+  solve2 _ (insts, graph) = show $ foldl1 lcm <$> traverse (pathLen insts graph $ not . is_end) starts
     where
       is_end = (=='Z') . last
       is_start = (=='A') . last

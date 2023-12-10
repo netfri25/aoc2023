@@ -39,7 +39,7 @@ safePow n e = n^e
 
 instance Part1 Day4 [Card] where
   parse1 _ = runParser (sepBy ws parseCard)
-  solve1 _ = Result . sum . map cardValue
+  solve1 _ = show . sum . map cardValue
 
 type Count = Int
 type Simulation = State (IM.IntMap (Count, Card))
@@ -56,5 +56,5 @@ evalCard card_id = do
 
 instance Part2 Day4 [Card] where
   parse2 = parse1
-  solve2 _ cards = Result $ sum $ map fst $ IM.elems $ flip execState cards_map $ mapM_ (evalCard . cardId) cards
+  solve2 _ cards = show $ sum $ map fst $ IM.elems $ flip execState cards_map $ mapM_ (evalCard . cardId) cards
     where cards_map = IM.fromList $ zip (map cardId cards) $ map (1,) cards

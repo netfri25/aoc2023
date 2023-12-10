@@ -10,7 +10,7 @@ data Day1 = Day1 deriving Show
 
 instance Part1 Day1 [String] where
   parse1 _ = map (filter isDigit) . lines
-  solve1 _ = Result . sum . map extractNumber
+  solve1 _ = show . sum . map extractNumber
     where
       extractNumber :: String -> Int
       extractNumber [] = 0

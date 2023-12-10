@@ -76,7 +76,7 @@ totalWins strength = sum . zipWith (*) [1..] . map betBid . concatMap (sortOn be
 
 instance Part1 Day7 [Bet] where
   parse1 _ = runParser $ sepBy ws parseBet
-  solve1 _ = Result . totalWins (handStrength . betHand)
+  solve1 _ = show . totalWins (handStrength . betHand)
 
 change :: Eq a => a -> a -> [a] -> [a]
 change _ _ [] = []
@@ -92,4 +92,4 @@ newJ = Card 1
 
 instance Part2 Day7 [Bet] where
   parse2 day = map (\(Bet hand bid) -> Bet (change oldJ newJ hand) bid) . parse1 day
-  solve2 _ = Result . totalWins (handStrength . filter (/=newJ) . betHand)
+  solve2 _ = show . totalWins (handStrength . filter (/=newJ) . betHand)

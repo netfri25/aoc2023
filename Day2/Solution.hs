@@ -36,7 +36,7 @@ parseColor = red <|> green <|> blue
 
 instance Part1 Day2 [Game] where
   parse1 _ = runParser $ mfilter (not . null) $ sepBy ws parseGame
-  solve1 _ = Result . sum . map gameId . filter canPlayGame
+  solve1 _ = show . sum . map gameId . filter canPlayGame
     where
       canPlayGame (Game _ cubeSets) = all canPlaySet cubeSets
       canPlaySet = and . M.intersectionWith (>=) maxCubes
@@ -44,4 +44,4 @@ instance Part1 Day2 [Game] where
 
 instance Part2 Day2 [Game] where
   parse2 = parse1
-  solve2 _ = Result . sum . map (product . M.unionsWith max . gameSets)
+  solve2 _ = show . sum . map (product . M.unionsWith max . gameSets)

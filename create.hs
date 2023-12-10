@@ -43,10 +43,10 @@ solutionContent day_n = unlines
   , ""
   , "instance Part1 " ++ day ++ " () where"
   , "  parse1 _ = undefined"
-  , "  solve1 _ = Result . const Todo"
+  , "  solve1 _ = show . const Todo"
   , ""
   , "instance Part2 " ++ day ++ " () where"
   , "  parse2 _ = undefined"
-  , "  solve2 _ = Result . const Todo"
+  , "  solve2 _ = show . const Todo"
   ]
   where day = "Day" ++ show day_n

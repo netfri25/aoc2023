@@ -39,7 +39,7 @@ wins (Race total high) = length $ takeWhile (>high) $ dropWhile (<=high) $ map (
 
 instance Part1 Day6 [Race] where
   parse1 _ = runParser parseRaces
-  solve1 _ = Result . product . map wins
+  solve1 _ = show . product . map wins
 
 parseSingleRace :: Parser String Race
 parseSingleRace = Race <$> race_time <* ws <*> race_highscore

@@ -70,7 +70,7 @@ getParts items = parts
 instance Part1 Day3 (M.Map Position ItemKind) where
   parse1 _ = M.fromList . runParser (skip *> many (skip *> parseItem <* skip)) . MkInput 1 1
     where skip = spanP (\c -> isSpace c || c == '.')
-  solve1 _ = Result . sum . map (fromNumber . snd) . getParts
+  solve1 _ = show . sum . map (fromNumber . snd) . getParts
 
 partsNear :: Position -> [Item] -> [Item]
 partsNear (Position prow pcol) = filter (any (`elem` positions) . allPositions)
@@ -87,7 +87,7 @@ lengthIs n xs = lengthIs (pred n) (tail xs)
 
 instance Part2 Day3 (M.Map Position ItemKind) where
   parse2 = parse1
-  solve2 _ items = Result $ sum $ map (product . map (fromNumber . snd)) gearsParts
+  solve2 _ items = show $ sum $ map (product . map (fromNumber . snd)) gearsParts
     where
       parts = getParts items
       stars = map fst $ filter (\case (snd -> Symbol '*') -> True; _ -> False) $ M.assocs items

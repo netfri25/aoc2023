@@ -56,10 +56,10 @@ type Timed a = (TimeMS, a)
 instance Show TimeMS where
   show (TimeMS t) = printf "%.3fms" t
 
-data Output = Output FilePath (Timed Result) (Timed Result)
+data Output = Output FilePath (Timed String) (Timed String)
 
-timeIO :: NFData a => IO a -> IO (Timed a)
-timeIO m = do
+timeShowIO :: NFData a => IO a -> IO (Timed a)
+timeShowIO m = do
   start <- getCPUTime
   x <- m
   finish <- x `deepseq` getCPUTime
@@ -69,8 +69,8 @@ timeIO m = do
 instance Show Output where
   show (Output path (t1, r1) (t2, r2)) = init $ unlines
     [ path ++ ":"
-    , "Part 1: " ++ show r1 ++ " (" ++ show t1 ++ ")"
-    , "Part 2: " ++ show r2 ++ " (" ++ show t2 ++ ")"
+    , "Part 1: " ++ r1 ++ " (" ++ show t1 ++ ")"
+    , "Part 2: " ++ r2 ++ " (" ++ show t2 ++ ")"
     , "Total time: " ++ show (t1 + t2)
     ]
 
@@ -83,17 +83,17 @@ dayPaths day = do
 runDayWith :: DayConstraint day i1 i2 => day -> FilePath -> IO Output
 runDayWith day path = uncurry (Output path) <$> executeDayWith day path
 
-executeDayWith :: DayConstraint day i1 i2 => day -> FilePath -> IO (Timed Result, Timed Result)
+executeDayWith :: DayConstraint day i1 i2 => day -> FilePath -> IO (Timed String, Timed String)
 executeDayWith day path = do
-  res1 <- timeIO (run1 day path)
-  res2 <- timeIO (run2 day path)
+  res1 <- timeShowIO (run1 day path)
+  res2 <- timeShowIO (run2 day path)
   return (res1, res2)
 
-runWithPart :: DayConstraint day i1 i2 => (day -> String -> Result) -> day -> FilePath -> IO Result
+runWithPart :: DayConstraint day i1 i2 => (day -> String -> String) -> day -> FilePath -> IO String
 runWithPart part day path = part day <$> readFile path
 
-run1 :: DayConstraint day i1 i2 => day -> FilePath -> IO Result
+run1 :: DayConstraint day i1 i2 => day -> FilePath -> IO String
 run1 = runWithPart part1
 
-run2 :: DayConstraint day i1 i2 => day -> FilePath -> IO Result
+run2 :: DayConstraint day i1 i2 => day -> FilePath -> IO String
 run2 = runWithPart part2

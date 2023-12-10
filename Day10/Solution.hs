@@ -92,7 +92,7 @@ mainLoops pipes = mapMaybe (stepToStart start_pos pipes <$> initialDists <*> id)
 
 instance Part1 Day10 (Grid Pipe) where
   parse1 _ = M.fromList . parsePipes
-  solve1 _ = show . maximum . M.unionsWith min . mainLoops
+  solve1 _ = show . flip div 2 . M.size . head . mainLoops
 
 instance Part2 Day10 (Grid Pipe) where
   parse2 = parse1

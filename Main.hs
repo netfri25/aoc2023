@@ -58,8 +58,8 @@ instance Show TimeMS where
 
 data Output = Output FilePath (Timed String) (Timed String)
 
-timeShowIO :: NFData a => IO a -> IO (Timed a)
-timeShowIO m = do
+timeIO :: NFData a => IO a -> IO (Timed a)
+timeIO m = do
   start <- getCPUTime
   x <- m
   finish <- x `deepseq` getCPUTime
@@ -85,8 +85,8 @@ runDayWith day path = uncurry (Output path) <$> executeDayWith day path
 
 executeDayWith :: DayConstraint day i1 i2 => day -> FilePath -> IO (Timed String, Timed String)
 executeDayWith day path = do
-  res1 <- timeShowIO (run1 day path)
-  res2 <- timeShowIO (run2 day path)
+  res1 <- timeIO (run1 day path)
+  res2 <- timeIO (run2 day path)
   return (res1, res2)
 
 runWithPart :: DayConstraint day i1 i2 => (day -> String -> String) -> day -> FilePath -> IO String

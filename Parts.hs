@@ -1,16 +1,13 @@
 {-# LANGUAGE FunctionalDependencies #-}
 
 module Parts
-  ( Todo(..)
-  , Part1(..)
+  ( Part1(..)
   , part1
   , Part2(..)
   , part2
   ) where
 
 import Control.DeepSeq (NFData(..), force)
-
-data Todo = Todo deriving Show
 
 class Part1 day input | day -> input where
   parse1 :: day -> String -> input

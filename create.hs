@@ -42,11 +42,11 @@ solutionContent day_n = unlines
   , "data " ++ day ++ " = " ++ day ++ " deriving Show"
   , ""
   , "instance Part1 " ++ day ++ " () where"
-  , "  parse1 _ = undefined"
-  , "  solve1 _ = show . const Todo"
+  , "  parse1 _ = const ()"
+  , "  solve1 _ = show . const ()"
   , ""
   , "instance Part2 " ++ day ++ " () where"
-  , "  parse2 _ = undefined"
-  , "  solve2 _ = show . const Todo"
+  , "  parse2 _ = const ()"
+  , "  solve2 _ = show . const ()"
   ]
   where day = "Day" ++ show day_n

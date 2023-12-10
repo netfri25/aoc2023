@@ -96,4 +96,4 @@ instance Part1 Day10 (Grid Pipe) where
 
 instance Part2 Day10 (Grid Pipe) where
   parse2 = parse1
-  solve2 _ = show . const Todo
+  solve2 _ = show . const ()

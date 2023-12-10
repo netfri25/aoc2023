@@ -71,18 +71,19 @@ type Grid = M.Map Position
 
 instance Part1 Day10 (Grid Pipe) where
   parse1 _ = M.fromList . parsePipes
-  solve1 _ pipes = Result $ maximum $ M.unionsWith min $ mapMaybe (stepToStart start_pos pipes <$> initial_dists <*> id) starts
+  solve1 _ pipes = Result $ maximum $ M.unionsWith min $ mapMaybe (stepToStart start_pos pipes <$> initialDists <*> id) starts
     where
       start_pos = fst $ head $ filter ((== Start) . snd) $ M.assocs pipes
       starts = filter (connectedTo start_pos) $ map (+ start_pos) [up, down, left, right]
+
+      initialDists :: Position -> Grid Int
+      initialDists pos = M.fromList [(start_pos, 0), (pos, 1)]
 
       connectedTo :: Position -> Position -> Bool
       connectedTo to from =
         case M.lookup from pipes of
           Just (Pipe dirs) -> to `elem` map (+from) dirs
           _ -> False
-
-      initial_dists pos = M.fromList [(start_pos, 0), (pos, 1)]
 
 instance Part2 Day10 () where
   parse2 _ = undefined

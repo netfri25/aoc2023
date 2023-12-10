@@ -5,7 +5,7 @@ import Parts
 
 import qualified Data.Map as M
 import Data.List (find)
-import Data.Maybe (catMaybes, mapMaybe)
+import Data.Maybe (catMaybes, mapMaybe, listToMaybe)
 
 data Day10 = Day10 deriving Show
 
@@ -81,8 +81,8 @@ connectedTo pipes to from =
     Just (Pipe dirs) -> to `elem` map (+from) dirs
     _ -> False
 
-mainLoops :: Grid Pipe -> [Grid Int]
-mainLoops pipes = mapMaybe (stepToStart start_pos pipes <$> initialDists <*> id) starts
+mainLoop :: Grid Pipe -> Maybe (Grid Int)
+mainLoop pipes = listToMaybe $ mapMaybe (stepToStart start_pos pipes <$> initialDists <*> id) starts
   where
     start_pos = fst $ head $ filter ((== Start) . snd) $ M.assocs pipes
     starts = filter (connectedTo pipes start_pos) $ map (+ start_pos) [up, down, left, right]
@@ -92,7 +92,7 @@ mainLoops pipes = mapMaybe (stepToStart start_pos pipes <$> initialDists <*> id)
 
 instance Part1 Day10 (Grid Pipe) where
   parse1 _ = M.fromList . parsePipes
-  solve1 _ = show . flip div 2 . M.size . head . mainLoops
+  solve1 _ = show . fmap (flip div 2 . M.size) . mainLoop
 
 instance Part2 Day10 (Grid Pipe) where
   parse2 = parse1

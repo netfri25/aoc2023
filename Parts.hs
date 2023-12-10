@@ -20,6 +20,8 @@ instance NFData Result where
   rnf (Result x) = rnf x
 
 data Todo = Todo deriving Show
+instance NFData Todo where
+  rnf _ = ()
 
 instance Show Result where
   show (Result x) = show x

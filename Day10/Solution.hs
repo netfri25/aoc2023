@@ -27,6 +27,12 @@ data Pipe = Start | Pipe [Position]
 data Position = Position Int Int
   deriving (Show, Eq, Ord)
 
+posY :: Position -> Int
+posY (Position _ y) = y
+
+posX :: Position -> Int
+posX (Position x _) = x
+
 instance Num Position where
   Position x1 y1 + Position x2 y2 = Position (x1+x2) (y1+y2)
   Position x1 y1 * Position x2 y2 = Position (x1*x2) (y1*y2)
@@ -69,22 +75,25 @@ stepToStart came_from pipes dists pos =
 
 type Grid = M.Map Position
 
+connectedTo :: Grid Pipe -> Position -> Position -> Bool
+connectedTo pipes to from =
+  case M.lookup from pipes of
+    Just (Pipe dirs) -> to `elem` map (+from) dirs
+    _ -> False
+
+mainLoops :: Grid Pipe -> [Grid Int]
+mainLoops pipes = mapMaybe (stepToStart start_pos pipes <$> initialDists <*> id) starts
+  where
+    start_pos = fst $ head $ filter ((== Start) . snd) $ M.assocs pipes
+    starts = filter (connectedTo pipes start_pos) $ map (+ start_pos) [up, down, left, right]
+
+    initialDists :: Position -> Grid Int
+    initialDists pos = M.fromList [(start_pos, 0), (pos, 1)]
+
 instance Part1 Day10 (Grid Pipe) where
   parse1 _ = M.fromList . parsePipes
-  solve1 _ pipes = Result $ maximum $ M.unionsWith min $ mapMaybe (stepToStart start_pos pipes <$> initialDists <*> id) starts
-    where
-      start_pos = fst $ head $ filter ((== Start) . snd) $ M.assocs pipes
-      starts = filter (connectedTo start_pos) $ map (+ start_pos) [up, down, left, right]
+  solve1 _ = Result . maximum . M.unionsWith min . mainLoops
 
-      initialDists :: Position -> Grid Int
-      initialDists pos = M.fromList [(start_pos, 0), (pos, 1)]
-
-      connectedTo :: Position -> Position -> Bool
-      connectedTo to from =
-        case M.lookup from pipes of
-          Just (Pipe dirs) -> to `elem` map (+from) dirs
-          _ -> False
-
-instance Part2 Day10 () where
-  parse2 _ = undefined
+instance Part2 Day10 (Grid Pipe) where
+  parse2 = parse1
   solve2 _ = Result . const Todo

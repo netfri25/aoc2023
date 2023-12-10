@@ -2,15 +2,16 @@
 module Main (main, mainAll) where
 
 import Parts
-import Day1.Solution (Day1(..))
-import Day2.Solution (Day2(..))
-import Day3.Solution (Day3(..))
-import Day4.Solution (Day4(..))
-import Day5.Solution (Day5(..))
-import Day6.Solution (Day6(..))
-import Day7.Solution (Day7(..))
-import Day8.Solution (Day8(..))
-import Day9.Solution (Day9(..))
+import Day1.Solution  (Day1(..))
+import Day2.Solution  (Day2(..))
+import Day3.Solution  (Day3(..))
+import Day4.Solution  (Day4(..))
+import Day5.Solution  (Day5(..))
+import Day6.Solution  (Day6(..))
+import Day7.Solution  (Day7(..))
+import Day8.Solution  (Day8(..))
+import Day9.Solution  (Day9(..))
+import Day10.Solution (Day10(..))
 
 import System.Directory (listDirectory)
 import Data.List (isSuffixOf, sort, intercalate)
@@ -34,6 +35,7 @@ days =
   , Day Day7
   , Day Day8
   , Day Day9
+  , Day Day10
   ]
 
 main :: IO ()

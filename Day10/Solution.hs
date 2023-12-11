@@ -6,7 +6,6 @@ import Parts
 import qualified Data.Map as M
 import Data.List (find)
 import Data.Maybe (catMaybes, mapMaybe, listToMaybe, fromJust, fromMaybe)
-import Data.Bits (xor)
 
 data Day10 = Day10 deriving Show
 
@@ -125,24 +124,14 @@ showPipesGrid pipes = do
     max_y = maximum $ map posY $ M.keys pipes
 
 countInside :: String -> Int
-countInside = countInside' False []
+countInside = countInside' False
   where
-    countInside' :: Bool -> [Char] -> String -> Int
-    countInside' _ _ [] = 0
-    countInside' inside stack (c:cs) =
-      case c of
-        '|' -> countInside' (not inside) stack cs
-        '-' -> countInside' inside stack cs
-        'L' -> countInside' inside (c:stack) cs
-        'F' -> countInside' inside (c:stack) cs
-        '7' ->
-          let inside' = (head stack == 'L') `xor` inside
-           in countInside' inside' (tail stack) cs
-        'J' ->
-          let inside' = (head stack == 'F') `xor` inside
-           in countInside' inside' (tail stack) cs
-        ' ' -> fromEnum inside + countInside' inside stack cs
-        _ -> undefined
+    countInside' :: Bool -> String -> Int
+    countInside' _ [] = 0
+    countInside' inside (c:cs)
+      | c `elem` "|LJ" = countInside' (not inside) cs
+      | otherwise = fromEnum (inside && c == ' ') + next
+      where next = countInside' inside cs
 
 instance Part2 Day10 [String] where
   parse2 day input = showPipesGrid $ fromJust main_pipes

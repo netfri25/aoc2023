@@ -1,3 +1,4 @@
+{-# OPTIONS_GHC -Wall -Wextra #-}
 {-# LANGUAGE FunctionalDependencies #-}
 
 module Parts
@@ -6,8 +7,6 @@ module Parts
   , Part2(..)
   , part2
   ) where
-
-import Control.DeepSeq (NFData(..), force)
 
 class Part1 day input | day -> input where
   parse1 :: day -> String -> input

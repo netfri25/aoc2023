@@ -14,6 +14,7 @@ import Day9.Solution  (Day9(..))
 import Day10.Solution (Day10(..))
 import Day11.Solution (Day11(..))
 import Day12.Solution (Day12(..))
+import Day13.Solution (Day13(..))
 
 import System.Directory (listDirectory)
 import Data.List (isSuffixOf, sort, intercalate)
@@ -40,6 +41,7 @@ days =
   , Day Day10
   , Day Day11
   , Day Day12
+  , Day Day13
   ]
 
 main :: IO ()

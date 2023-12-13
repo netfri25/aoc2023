@@ -4,7 +4,6 @@ module Day13.Solution (Day13(..)) where
 import Parts
 import Parser
 
-import Data.Bits
 import Control.Applicative (Alternative (..))
 import Control.Monad (mfilter)
 import Data.List (inits, tails, transpose)
@@ -13,18 +12,10 @@ import Data.Foldable (fold)
 
 data Day13 = Day13 deriving Show
 
-newtype Line = Line Int
-  deriving (Show, Eq, Bits)
-
-type Grid a = [[a]]
-type Pattern = Grid Int
+type Pattern = [[Int]]
 
 parsePattern :: Input i Char => Parser i Pattern
-parsePattern = mfilter (not . null) $ sepBy (eqP '\n') pattern_line
-  where
-    pattern_line = some $ rock <|> ash
-    rock = 1 <$ eqP '#'
-    ash = 0 <$ eqP '.'
+parsePattern = mfilter (not . null) $ sepBy (eqP '\n') (some $ (1 <$ eqP '#') <|> (0 <$ eqP '.'))
 
 instance Part1 Day13 [Pattern] where
   parse1 _ = runParser $ sepBy ws parsePattern
@@ -34,11 +25,7 @@ splits :: [a] -> [([a], [a])]
 splits xs = zip (inits xs) (tails xs)
 
 findMirror :: Similar a => Int -> [a] -> Maybe Int
-findMirror non_similarity xs = listToMaybe
-  [ i
-  | (i, (lhs, rhs)) <- zip [1..] $ init $ tail $ splits xs
-  , nonSimilar (reverse lhs) rhs == non_similarity
-  ]
+findMirror non_similarity xs = listToMaybe [length lhs | (lhs, rhs) <- init $ tail $ splits xs, nonSimilar (reverse lhs) rhs == non_similarity]
 
 patternValue :: Int -> Pattern -> Maybe Int
 patternValue non_similarity pat = (*100) <$> findMirror non_similarity pat <|> findMirror non_similarity (transpose pat)

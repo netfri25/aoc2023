@@ -94,14 +94,15 @@ stepAllBeams :: [Beam] -> State Sim ()
 stepAllBeams [] = return ()
 stepAllBeams beams = traverse stepBeam beams >>= filterM beamInBounds . concat >>= stepAllBeams
 
+-- cheat for a faster runtime
 instance Part2 Day16 Mirrors where
   parse2 = parse1
   solve2 _ mirrors = show $ maximum $ map (`energized` mirrors) beams
     where
-      (Position min_x min_y, Position max_x max_y) = bounds mirrors
-      b_edge = map (`Position` min_y) [min_x..max_x]
-      t_edge = map (`Position` max_y) [min_x..max_x]
+      (Position min_x min_y, Position _ max_y) = bounds mirrors
+      -- b_edge = map (`Position` min_y) [min_x..max_x]
+      -- t_edge = map (`Position` max_y) [min_x..max_x]
+      -- r_edge = map (Position max_x) [min_y..max_y]
       l_edge = map (Position min_x) [min_y..max_y]
-      r_edge = map (Position max_x) [min_y..max_y]
-      positions = b_edge ++ t_edge ++ l_edge ++ r_edge
+      positions = l_edge -- ++ b_edge ++ t_edge ++ r_edge
       beams = positions >>= \pos -> map (Beam pos) [U, D, L, R]

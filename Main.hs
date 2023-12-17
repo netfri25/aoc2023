@@ -55,11 +55,8 @@ days =
 main :: IO ()
 main = runDay (last days)
 
-printOutputs :: [Output] -> IO ()
-printOutputs = putStr . unlines . map (unlines . showOutput)
-
 runDay :: Day -> IO ()
-runDay (Day day) = dayPaths day >>= traverse (runDayWith day) >>= printOutputs
+runDay (Day day) = dayPaths day >>= mapM_ (runDayWith day)
 
 mainAll :: IO ()
 mainAll = mapM_ (\day -> runDay day >> putStrLn "") days
@@ -70,11 +67,6 @@ type Timed a = (TimeMS, a)
 instance Show TimeMS where
   show (TimeMS t) = printf "%.3fms" t
 
-data Output = Output FilePath (Timed String) (Timed String)
-
-instance Show Output where
-  show = unlines . showOutput
-
 timeIO :: NFData a => IO a -> IO (Timed a)
 timeIO m = do
   start <- getCPUTime
@@ -83,34 +75,27 @@ timeIO m = do
   let elapsed_ms = fromIntegral (finish - start) / 1e9
   return (TimeMS elapsed_ms, x)
 
-showOutput :: Output -> [String]
-showOutput (Output path (t1, r1) (t2, r2)) =
-  [ path ++ ":"
-  , "Part 1: " ++ r1 ++ " (" ++ show t1 ++ ")"
-  , "Part 2: " ++ r2 ++ " (" ++ show t2 ++ ")"
-  , "Total time: " ++ show (t1 + t2)
-  ]
-
 dayPaths :: DayConstraint day i1 i2 => day -> IO [FilePath]
 dayPaths day = do
   let dir = show day
   paths <- listDirectory dir
   return $ sort $ map (\p -> dir ++ "/" ++ p) $ filter (isSuffixOf ".txt") paths
 
-runDayWith :: DayConstraint day i1 i2 => day -> FilePath -> IO Output
-runDayWith day path = uncurry (Output path) <$> executeDayWith day path
+runDayWith :: DayConstraint day i1 i2 => day -> FilePath -> IO ()
+runDayWith day path = do
+  (t1, r1) <- timeIO $ run1 day path
+  putStrLn $ path ++ ":"
+  putStrLn $ "Part 1: " ++ r1 ++ " (" ++ show t1 ++ ")"
+  (t2, r2) <- timeIO $ run2 day path
+  putStrLn $ "Part 2: " ++ r2 ++ " (" ++ show t2 ++ ")"
+  putStrLn $ "Total time: " ++ show (t1 + t2)
+  putStrLn ""
 
-executeDayWith :: DayConstraint day i1 i2 => day -> FilePath -> IO (Timed String, Timed String)
-executeDayWith day path = do
-  res1 <- run1 day path
-  res2 <- run2 day path
-  return (res1, res2)
+runWithPart :: DayConstraint day i1 i2 => (day -> String -> String) -> day -> FilePath -> IO String
+runWithPart part day path = part day <$> readFile path
 
-runWithPart :: DayConstraint day i1 i2 => (day -> String -> String) -> day -> FilePath -> IO (Timed String)
-runWithPart part day path = readFile path >>= timeIO . return . part day
-
-run1 :: DayConstraint day i1 i2 => day -> FilePath -> IO (Timed String)
+run1 :: DayConstraint day i1 i2 => day -> FilePath -> IO String
 run1 = runWithPart part1
 
-run2 :: DayConstraint day i1 i2 => day -> FilePath -> IO (Timed String)
+run2 :: DayConstraint day i1 i2 => day -> FilePath -> IO String
 run2 = runWithPart part2

@@ -102,12 +102,7 @@ convertRangesByMap :: [Range] -> Map -> [Range]
 convertRangesByMap rs (Map {mapConversions}) = trimRanges $ concatMap (filter validRange . flip convertRange mapConversions) rs
 
 rangesOverlap :: Range -> Range -> Bool
-rangesOverlap r1@(Range start1 end1) r2@(Range start2 end2)
-  | inRange r1 start2 = True
-  | inRange r1 end2 = True
-  | inRange r2 start1 = True
-  | inRange r2 end1 = True
-  | otherwise = False
+rangesOverlap r1@(Range start1 end1) r2@(Range start2 end2) = or [inRange r1 start2, inRange r1 end2 , inRange r2 start1 , inRange r2 end1]
 
 rangesAdjacent :: Range -> Range -> Bool
 rangesAdjacent (Range start end) = rangesOverlap (Range (start - 1) (end + 1))
@@ -116,15 +111,13 @@ rangesUnion :: Range -> Range -> Range
 rangesUnion (Range start1 end1) (Range start2 end2) = Range (min start1 start2) (max end1 end2)
 
 trimRanges :: [Range] -> [Range]
-trimRanges =
-  foldl
-    ( \trimmed range ->
-        let adjacent = filter (rangesAdjacent range) trimmed
-            notAdjacent = filter (not . rangesAdjacent range) trimmed
-            merged = foldl rangesUnion range adjacent
-         in (merged : notAdjacent)
-    )
-    []
+trimRanges = foldl
+    (\trimmed range ->
+      let adjacent = filter (rangesAdjacent range) trimmed
+          notAdjacent = filter (not . rangesAdjacent range) trimmed
+          merged = foldl rangesUnion range adjacent
+       in (merged : notAdjacent)
+    ) []
 
 instance Part2 Day5 ([Range], [Map]) where
   parse2 _ = runParser $ (,) <$> parseSeeds2 <* ws <*> sepBy ws parseMap

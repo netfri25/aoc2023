@@ -14,15 +14,7 @@ import Data.List (intercalate)
 data Day12 = Day12 deriving Show
 
 data Spring = Good | Bad
-  deriving (Eq)
-
-instance Show Spring where
-  show Good = "."
-  show Bad  = "#"
-
-instance {-# OVERLAPS #-} Show (Maybe Spring) where
-  show Nothing = "?"
-  show (Just x) = show x
+  deriving Eq
 
 parseSpring :: Input i Char => Parser i (Maybe Spring)
 parseSpring = nextP >>= lift . flip lookup [('?', Nothing), ('.', Just Good), ('#', Just Bad)]
@@ -63,7 +55,6 @@ springsCombs springs' gs' = flip evalState mempty $ springsCombs' (zip [1..] spr
           rhs <- springsCombs' ((i, Just Bad) : springs) gs
           let result = lhs + rhs
           modify (M.insert (i, j) result)
-
 
 instance Part2 Day12 [([Maybe Spring], [Group])] where
   parse2 day = map (bimap update_springs update_counts) . parse1 day

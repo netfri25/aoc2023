@@ -17,8 +17,7 @@ hash :: String -> Int
 hash = fromIntegral . foldl (\acc c -> (acc + fromEnum c) * 17 `mod` 256) 0
 
 instance Part1 Day15 [String] where
-  parse1 _ = runParser $ sepBy (eqP sep) $ spanP (\c -> c /= sep && not (isSpace c))
-    where sep = ','
+  parse1 _ = runParser $ sepBy (eqP ',') $ spanP (\c -> c /= ',' && not (isSpace c))
   solve1 _ = show . sum . map hash
 
 data Inst = Rem String | Set String Int

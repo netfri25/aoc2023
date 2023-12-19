@@ -10,9 +10,6 @@ data Day11 = Day11 deriving Show
 data Point = Point Int Int
   deriving (Eq, Ord)
 
-instance Show Point where
-  show (Point x y) = unwords ("Point" : map show [x, y])
-
 distance :: Point -> Point -> Int
 distance (Point x1 y1) (Point x2 y2) = abs (x2 - x1) + abs (y2 - y1)
 

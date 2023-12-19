@@ -74,10 +74,7 @@ parseFromColor :: Color -> Point
 parseFromColor letters = fromIntegral num * dir
   where
     dir = [right, down, left, up] !! digitToInt (last letters)
-    num_hex = take 5 letters
-    num_digits = map hexDigitToInt num_hex
-    base16 = iterate (*16) 1
-    num = sum $ zipWith (*) base16 (reverse num_digits)
+    num = sum $ zipWith (*) (iterate (*16) 1) $ reverse $ map hexDigitToInt $ take 5 letters
 
 instance Part2 Day18 [Point] where
   parse2 _ = runParser $ sepBy ws (fmap parseFromColor $ parseOffset *> ws *> eqP '(' *> parseColor <* eqP ')')

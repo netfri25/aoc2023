@@ -9,16 +9,10 @@ import Data.Maybe (catMaybes, mapMaybe, listToMaybe, fromJust, fromMaybe)
 
 data Day10 = Day10 deriving Show
 
-up :: Position
+up, down, left, right :: Position
 up = Position 0 (-1)
-
-down :: Position
 down = Position 0 1
-
-left :: Position
 left = Position (-1) 0
-
-right :: Position
 right = Position 1 0
 
 data Pipe = Start | Pipe [Position]

@@ -59,18 +59,14 @@ pDrop queue = case M.minViewWithKey queue of
   Just ((_, [_]), new_queue) -> new_queue
   Just ((k, _:_:_), _) -> M.adjust tail k queue
 
-data Path = Path
-  { pathCost :: Int
-  , pathPos :: Point
-  , pathDir :: Point
-  , pathSteps :: Int
-  } deriving (Eq, Show, Ord)
+data Path = Path Int Point Point Int
+  deriving (Eq, Show, Ord)
 
-data VisitedKey = VisitedKey
-  { visitedPos :: Point
-  , visitedDir :: Point
-  , visitedSteps :: Int
-  } deriving (Show, Eq, Ord)
+pathCost :: Path -> Int
+pathCost (Path cost _ _ _) = cost
+
+data VisitedKey = VisitedKey Point Point Int -- position, direction, steps
+  deriving (Show, Eq, Ord)
 
 visitedKeyFromPath :: Path -> VisitedKey
 visitedKeyFromPath (Path _ pos dir steps) = VisitedKey pos dir steps
